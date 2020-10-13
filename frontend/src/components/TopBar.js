@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../assets/images/logo.svg';
-import { LogoutOutlined } from '@ant-design/icons';
+import { Icon } from 'antd';
 
 export class TopBar extends React.Component {
   render() {
@@ -10,7 +10,7 @@ export class TopBar extends React.Component {
         <span className="App-title">Around</span>
         {this.props.isLoggedIn ?
           <a className="logout" onClick={this.props.handleLogout} >
-            <LogoutOutlined />{' '}Logout
+            <Icon type="logout"/>{' '}Logout
           </a> : null}
       </header>
     );

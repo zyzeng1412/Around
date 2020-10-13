@@ -16,40 +16,43 @@ export class CreatePostButton extends React.Component {
   };
 
   handleOk = () => {
-    this.form.validateFields().then(values => {
-      const token = localStorage.getItem(TOKEN_KEY);
-      const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+    this.form.validateFields((err, values) => {
+      console.log(values);
+      if (!err) {
+        const token = localStorage.getItem(TOKEN_KEY);
+        const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
 
-      const formData = new FormData();
-      formData.set('lat', lat + Math.random() * LOC_SHAKE * 2 - LOC_SHAKE);
-      formData.set('lon', lon + Math.random() * LOC_SHAKE * 2 - LOC_SHAKE);
-      formData.set('message', values.message);
-      formData.set('image', values.image[0].originFileObj);
+        const formData = new FormData();
+        formData.set('lat', lat + Math.random() * LOC_SHAKE * 2 - LOC_SHAKE);
+        formData.set('lon', lon + Math.random() * LOC_SHAKE * 2 - LOC_SHAKE);
+        formData.set('message', values.message);
+        formData.set('image', values.image[0].originFileObj);
 
-      this.setState({ confirmLoading: true });
-      fetch(`${API_ROOT}/post`, {
-        method: 'POST',
-        headers: {
-          Authorization: `${AUTH_HEADER} ${token}`
-        },
-        body: formData,
-      })
-        .then((response) => {
-          if (response.ok) {
-            return this.props.loadPostsByTopic();
-          }
-          throw new Error('Failed to create post.');
+        this.setState({ confirmLoading: true });
+        fetch(`${API_ROOT}/post`, {
+          method: 'POST',
+          headers: {
+            Authorization: `${AUTH_HEADER} ${token}`
+          },
+          body: formData,
         })
-        .then(() => {
-          this.setState({ visible: false, confirmLoading: false });
-          this.form.resetFields();
-          message.success('Post created successfully!');
-        })
-        .catch((e) => {
-          console.error(e);
-          message.error('Failed to create post.');
-          this.setState({ confirmLoading: false });
-        });
+          .then((response) => {
+            if (response.ok) {
+              return this.props.loadPostsByTopic();
+            }
+            throw new Error('Failed to create post.');
+          })
+          .then(() => {
+            this.setState({ visible: false, confirmLoading: false });
+            this.form.resetFields();
+            message.success('Post created successfully!');
+          })
+          .catch((e) => {
+            console.error(e);
+            message.error('Failed to create post.');
+            this.setState({ confirmLoading: false });
+          });
+      }
     });
   };
 
