@@ -6,9 +6,6 @@ import {
   API_ROOT,
   AUTH_HEADER,
   TOKEN_KEY,
-  POST_TYPE_IMAGE,
-  POST_TYPE_VIDEO,
-  POST_TYPE_UNKNOWN,
   TOPIC_AROUND,
   TOPIC_FACE,
 } from '../constants';
@@ -82,7 +79,6 @@ export class Home extends React.Component {
   renderImagePosts() {
     const { posts } = this.state;
     const images = posts
-      .filter((post) => post.type === POST_TYPE_IMAGE)
       .map((post) => {
         return {
           user: post.user,
@@ -96,25 +92,7 @@ export class Home extends React.Component {
     return <Gallery images={images}/>
   }
 
-  renderVideoPosts() {
-    const { posts } = this.state;
-    return (
-      <Row gutter={30}>
-        {
-          posts
-            .filter((post) => [POST_TYPE_VIDEO, POST_TYPE_UNKNOWN].includes(post.type))
-            .map((post) => (
-              <Col span={6} key={post.url}>
-                <video src={post.url} controls={true} className="video-block"/>
-                <p>{post.user}: {post.message}</p>
-              </Col>
-            ))
-        }
-      </Row>
-    );
-  }
-
-  renderPosts(type) {
+  renderPosts() {
     const { error, isLoadingGeoLocation, isLoadingPosts, posts } = this.state;
     if (error) {
       return error;
@@ -123,7 +101,7 @@ export class Home extends React.Component {
     } else if (isLoadingPosts) {
       return <Spin tip="Loading posts..."/>
     } else if (posts.length > 0) {
-      return type === POST_TYPE_IMAGE ? this.renderImagePosts() : this.renderVideoPosts();
+      return  this.renderImagePosts();
     } else {
       return 'No nearby posts';
     }
@@ -184,10 +162,7 @@ export class Home extends React.Component {
         </Radio.Group>
         <Tabs tabBarExtraContent={operations} className="main-tabs">
           <TabPane tab="Image Posts" key="1">
-            {this.renderPosts(POST_TYPE_IMAGE)}
-          </TabPane>
-          <TabPane tab="Video Posts" key="2">
-            {this.renderPosts(POST_TYPE_VIDEO)}
+            {this.renderPosts()}
           </TabPane>
           <TabPane tab="Map" key="3">
             <AroundMap
