@@ -1,4 +1,4 @@
-export const API_ROOT = 'http://104.198.208.24:8080';
+export const API_ROOT = 'https://around.appspot.com/api/v1';
 export const TOKEN_KEY = 'TOKEN_KEY';
 export const GEO_OPTIONS = {
   enableHighAccuracy: true,

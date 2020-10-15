@@ -28,7 +28,7 @@ class NormalCreatePostForm extends React.Component {
             rules: [{ required: true, message: 'Please input message.' }],
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Image/Video">
+        <Form.Item label="Image">
           <div className="dropbox">
             {getFieldDecorator('image', {
               valuePropName: 'fileList',
